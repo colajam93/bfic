@@ -27,7 +27,7 @@ int main()
     std::vector<std::uint8_t> v{0};
     auto p = [&index, &v](char c) {
         printf("%c ", c);
-        for (auto&& i : v) {
+        for (auto &&i : v) {
             printf("|%02d", i);
         }
         printf("|\n  ");
@@ -38,7 +38,9 @@ int main()
     };
     for (size_t i = 0; i < buf.size(); ++i) {
         auto c = buf[i];
-        // p(c);
+        if (false) {
+            p(c);
+        }
         if (c == '>') {
             ++index;
             if (v.size() <= index) {
