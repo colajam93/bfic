@@ -224,8 +224,10 @@ ParseResult ArgumentParser::parseArgs(int argc, char** argv)
     std::vector<std::string> temp;
     int nargs = 0;
 
-    currentPositional = positionals_.front();
-    positionals_.pop();
+    if (!positionals_.empty()) {
+        currentPositional = positionals_.front();
+        positionals_.pop();
+    }
 
     for (auto&& i : programArguments) {
         auto optional = isOptional(i);
