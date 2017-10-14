@@ -5,14 +5,14 @@ Simple Brainfuck interpreter with visualizing internal state
 ## Requirement
 
 - CMake >= 3.7
-- C++14 compiler
+- Clang (with C++17 support)
 
 ## Build and Usage
 
 ```
 $ cmake /path/to/bfic
 $ make
-$ echo '++++[>+++++<-]>[<+++++>-]<--.++++.+++.------.' | ./bfic
+$ echo '++++[>+++++<-]>[<+++++>-]<--.++++.+++.------.' | ./bfic (or ./bfic -p)
 ```
 
 ## License
