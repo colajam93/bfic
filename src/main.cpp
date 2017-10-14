@@ -1,11 +1,33 @@
+#include "ArgParse.hpp"
+#include "String.hpp"
+
 #include <algorithm>
-#include <cstdint>
 #include <cstdio>
+#include <iostream>
 #include <string>
 #include <vector>
 
-int main()
+int main(int argc, char** argv)
 {
+    using namespace vrlk::ArgParse;
+    using namespace vrlk::String;
+
+    constexpr auto VISUALIZE_STATE = "print";
+    auto parser = ArgumentParser();
+    parser.addArgument(VISUALIZE_STATE)
+        .type(ArgumentType::Optional)
+        .shortName("p")
+        .save();
+    auto args = parser.parseArgs(argc, argv);
+    if (args.second) {
+        std::cerr << args.second.message() << std::endl;
+        return 1;
+    }
+
+    bool visualizeState =
+        args.first.find(VISUALIZE_STATE) != std::end(args.first);
+
+    // TODO: add lexer and parser
     std::string buf;
     {
         const std::string commands = "><+-.,[]";
@@ -18,7 +40,7 @@ int main()
                 auto it =
                     std::find(std::begin(commands), std::end(commands), c);
                 if (it != std::end(commands)) {
-                    buf += c;
+                    buf += static_cast<char>(c);
                 }
             }
         }
@@ -27,7 +49,7 @@ int main()
     std::vector<std::uint8_t> v{0};
     auto p = [&index, &v](char c) {
         printf("%c ", c);
-        for (auto &&i : v) {
+        for (auto&& i : v) {
             printf("|%02d", i);
         }
         printf("|\n  ");
@@ -38,7 +60,7 @@ int main()
     };
     for (size_t i = 0; i < buf.size(); ++i) {
         auto c = buf[i];
-        if (false) {
+        if (visualizeState) {
             p(c);
         }
         if (c == '>') {
@@ -62,11 +84,11 @@ int main()
             std::putchar(v[index]);
         }
         else if (c == ',') {
-            v[index] = std::getchar();
+            v[index] = static_cast<unsigned char>(std::getchar());
         }
         else if (c == '[') {
             if (v[index] == 0) {
-                // todo error handling
+                // TODO: error handling
                 auto t = i + 1;
                 do {
                     ++t;
@@ -76,7 +98,7 @@ int main()
         }
         else if (c == ']') {
             if (v[index] != 0) {
-                // todo error handling
+                // TODO: error handling
                 auto t = i - 1;
                 do {
                     --t;
